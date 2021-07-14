@@ -230,6 +230,7 @@ public:
         size_t err = FSE_decompress_usingDTable(&deltas[0], numDeltas, inp, inp_size, dt);
 
         if (FSE_isError(err)) {
+        	std::cerr << "inp_size=" << inp_size << ", numDeltas=" << numDeltas << std::endl;
             throw InvalidStateException(FSE_getErrorName(err));
         }
 

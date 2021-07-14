@@ -114,7 +114,22 @@ public:
             SafeRead(disk_file, c2_buf, c2_size);
             this->C2.push_back(Bits(c2_buf, c2_size, c2_size * 8).Slice(0, k).GetValue());
         }
-
+        
+        std::cout << "Plot K: " << int(header.k) << std::endl;
+        std::cout << "Plot ID: " << std::hex;
+        for(int i = 0; i < kIdLen; ++i) {
+        	std::cout << header.id[i];
+        }
+        std::cout << std::endl;
+        
+        for(int i = 1; i <= 10; ++i) {
+        	std::cout << "Pointer " << i << ": " << table_begin_pointers[i] << std::endl;
+        }
+        std::cout << "C2:";
+        for(auto Y : C2) {
+        	std::cout << " " << Y;
+        }
+        std::cout << std::endl;
         delete[] c2_buf;
     }
 
