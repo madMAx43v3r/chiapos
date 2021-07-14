@@ -116,9 +116,9 @@ public:
         }
         
         std::cout << "Plot K: " << int(header.k) << std::endl;
-        std::cout << "Plot ID: " << std::hex;
+        std::cout << "Plot ID:" << std::hex;
         for(int i = 0; i < kIdLen; ++i) {
-        	std::cout << int(header.id[i]);
+        	std::cout << " " << int(header.id[i]);
         }
         std::cout << std::dec << std::endl;
         
