@@ -118,9 +118,9 @@ public:
         std::cout << "Plot K: " << int(header.k) << std::endl;
         std::cout << "Plot ID: " << std::hex;
         for(int i = 0; i < kIdLen; ++i) {
-        	std::cout << header.id[i];
+        	std::cout << int(header.id[i]);
         }
-        std::cout << std::endl;
+        std::cout << std::dec << std::endl;
         
         for(int i = 1; i <= 10; ++i) {
         	std::cout << "Pointer " << i << ": " << table_begin_pointers[i] << std::endl;
