@@ -66,6 +66,7 @@ public:
     {
         LargeBits proof_bits = LargeBits(proof_bytes, proof_size, proof_size * 8);
         if (k * 64 != proof_bits.GetSize()) {
+        	std::cerr << "k * 64 != proof_bits.GetSize()" << std::endl;
             return LargeBits();
         }
         std::vector<Bits> proof;
@@ -99,9 +100,12 @@ public:
                 // If there is no match, fails.
                 uint64_t cdiff = r_plot_entry.y / kBC - l_plot_entry.y / kBC;
                 if (cdiff != 1) {
+                	std::cerr << "cdiff != 1 # cdiff=" << cdiff << ", depth=" << int(depth)
+                			<< ", i=" << i << std::endl;
                     return LargeBits();
                 } else {
                     if(f.FindMatches(bucket_L, bucket_R, nullptr, nullptr) != 1) {
+                    	std::cerr << "FindMatches != 1" << std::endl;
                         return LargeBits();
                     }
                 }
@@ -113,6 +117,7 @@ public:
             }
             for (auto & new_y : new_ys) {
                 if (new_y.GetSize() <= 0) {
+                	std::cerr << "new_y.GetSize() <= 0" << std::endl;
                     return LargeBits();
                 }
             }
@@ -129,6 +134,7 @@ public:
             // Returns quality string, which requires changing proof to plot ordering
             return GetQualityString(k, proof_bits, quality_index, challenge);
         } else {
+        	std::cerr << "final compare failed" << std::endl;
             return LargeBits();
         }
     }
