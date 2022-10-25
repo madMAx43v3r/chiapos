@@ -21,6 +21,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <memory>
 
 #include "../lib/FiniteStateEntropy/lib/fse.h"
 #include "../lib/FiniteStateEntropy/lib/hist.h"
@@ -58,16 +59,16 @@ public:
         return (DT_MEMO.find(R) != DT_MEMO.end());
     }   
 
-    void CTAssign(double R, FSE_CTable *ct)
+    bool CTAssign(double R, FSE_CTable *ct)
     {
         std::lock_guard<std::mutex> l(memoMutex);
-        CT_MEMO[R] = ct;
+        return CT_MEMO.emplace(R, ct).second;
     }
 
-    void DTAssign(double R, FSE_DTable *dt)
+    bool DTAssign(double R, FSE_DTable *dt)
     {
         std::lock_guard<std::mutex> l(memoMutex);
-        DT_MEMO[R] = dt;
+        return DT_MEMO.emplace(R, dt).second;
     }
 
     FSE_CTable *CTGet(double R)
@@ -192,7 +193,9 @@ public:
             if (FSE_isError(err)) {
                 throw InvalidStateException(FSE_getErrorName(err));
             }
-            tmCache.CTAssign(R, ct);
+            if(!tmCache.CTAssign(R, ct)) {
+                FSE_freeCTable(ct);
+            }
         }
 
         FSE_CTable *ct = tmCache.CTGet(R);
@@ -221,7 +224,9 @@ public:
             if (FSE_isError(err)) {
                 throw InvalidStateException(FSE_getErrorName(err));
             }
-            tmCache.DTAssign(R, dt);
+            if(!tmCache.DTAssign(R, dt)) {
+                FSE_freeDTable(dt);
+            }
         }
 
         FSE_DTable *dt = tmCache.DTGet(R);
